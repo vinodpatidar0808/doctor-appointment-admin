@@ -9,6 +9,10 @@ const Dentist = () => {
 
   }
 
+  const reset  = () => {
+    setDentist({ name: "", phone: "", email: "", password: "", username: "", gender: "", hourlyRate: "" })
+  }
+
   const disableSubmitButton = () => {
     return (!dentist.name || !dentist.phone || !dentist.email || !dentist.password || !dentist.username || !dentist.hourlyRate || !dentist.gender)
   }
@@ -54,8 +58,8 @@ const Dentist = () => {
       </div>
 
 
-      <div className="flex justify-between w-full mt-5 px-8 ">
-        <button className="border-2  px-3 py-2 rounded-md text-sm outline-none" onClick={() => setService({ name: "", price: "" })}>Cancel</button>
+      <div className="flex justify-between w-[40%] mt-5 px-8 ">
+        <button className="border-2  px-3 py-2 rounded-md text-sm outline-none" onClick={reset}>Cancel</button>
         <button className="border-2  px-3 py-2 rounded-md text-sm bg-softGray outline-none disabled:bg-charcoalGray disabled:text-white" disabled={disableSubmitButton()} onClick={handleAddDentist}>Add Service</button>
       </div>
     </>
