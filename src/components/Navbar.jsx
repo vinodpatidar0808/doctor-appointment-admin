@@ -1,11 +1,12 @@
+import { useLocation } from "react-router-dom";
+import { getPageHeader } from "../utils";
 
 const Navbar = () => {
+  const { pathname } = useLocation();
+
   return (
-    <nav className="flex items-center justify-end  border-b-2 border-charcoalGray sticky top-0 text-charcoalGray px-8 py-5  w-full">
-      {/* TODO: make border take full height if time permits */}
-      {/* <div className="w-[15%] border-r-2 divide-y border-charcoalGray">
-        <p className="">LOGO</p>
-      </div> */}
+    <nav className="flex items-center justify-between  border-b-2 border-charcoalGray sticky top-0 text-charcoalGray px-8 py-5  w-full">
+      <p className="ml-[22%]">{getPageHeader(pathname)}</p>
       <div className="flex  gap-3">
         <p>Admin</p>
         <p className="w-6 h-6 rounded-full bg-softGray"></p>
