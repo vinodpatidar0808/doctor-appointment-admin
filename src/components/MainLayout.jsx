@@ -7,9 +7,9 @@ const MainLayout = () => {
     <div>
       <Navbar />
       <Sidebar />
-      <div className="ml-[22%] py-2 ">
+      <main className="ml-[20%] py-4 ">
         <Outlet />
-      </div>
+      </main>
     </div>
   )
 }
