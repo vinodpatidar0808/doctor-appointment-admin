@@ -7,7 +7,10 @@ export default {
   theme: {
     extend: {
       colors: {
-        text1: "#D9D9D9"
+        // TODO: change name for this colors here and wherever used
+        softGray: "#D9D9D9",
+        charcoalGray: "#616161",
+
       }
     },
   },
