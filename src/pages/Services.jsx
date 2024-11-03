@@ -1,8 +1,10 @@
 import axios from "axios"
 import { useState } from "react"
+import { useNavigate } from "react-router-dom"
+import { showToastMessage } from "../utils"
 
 const Services = () => {
-
+  const navigate = useNavigate()
   const [service, setService] = useState({ name: "", price: "" })
   const handleChange = (e) => {
     if (e.target.name === "price" && (parseInt(e.target.value) > 0 || e.target.value === "")) {
@@ -14,7 +16,31 @@ const Services = () => {
 
   const handleAddService = async () => {
     // TODO: implement this function
-    axios.post(`${import.meta.env.VITE_BACKEND_BASE_URL}/admin/addservice`, service)
+    try {
+      const { data } = await axios.post(`${import.meta.env.VITE_BACKEND_BASE_URL}/admin/addservice`, service, {
+        headers: {
+          'Authorization': `${sessionStorage.getItem('authToken')}`
+        }
+      })
+
+      if (data.success) {
+        showToastMessage('SUCCESS', data.message)
+        setService({ name: "", price: "" })
+        return
+      } else {
+        showToastMessage('ERROR', data.message)
+      }
+
+    } catch (error) {
+      console.log(error)
+      showToastMessage('ERROR', error.response.data.message)
+      if (error.response.status === 401) {
+        sessionStorage.removeItem('authToken')
+        navigate('/login')
+      }
+    }
+
+
   }
 
 
