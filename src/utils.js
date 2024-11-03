@@ -49,3 +49,7 @@ export const showToastMessage = (type, message) => {
   }
   // Add other types when needed
 };
+
+export const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+export const mobileRegex = /^[6-9]\d{9}$/;

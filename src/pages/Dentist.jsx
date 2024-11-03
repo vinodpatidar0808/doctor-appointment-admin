@@ -1,25 +1,54 @@
-import { useState } from "react"
-import Input from "../components/Input"
 import axios from "axios"
+import { useState } from "react"
+import { useNavigate } from "react-router-dom"
+import Input from "../components/Input"
+import { emailRegex, mobileRegex, showToastMessage } from "../utils"
 
 const Dentist = () => {
+  const navigate = useNavigate()
   const [dentist, setDentist] = useState({ name: "", phone: "", email: "", password: "", username: "", gender: "", hourlyRate: "" })
 
   const handleChange = (e) => {
+    if (e.target.name !== "hourlyRate") {
+      setDentist(curr => ({ ...curr, [e.target.name]: e.target.value }))
+      return
+    }
 
+    if (e.target.name === "hourlyRate" && (parseInt(e.target.value) > 0 || e.target.value === "")) {
+      setDentist(curr => ({ ...curr, [e.target.name]: parseInt(e.target.value) }))
+    }
   }
 
-  const reset  = () => {
+  const reset = () => {
     setDentist({ name: "", phone: "", email: "", password: "", username: "", gender: "", hourlyRate: "" })
   }
 
   const disableSubmitButton = () => {
-    return (!dentist.name || !dentist.phone || !dentist.email || !dentist.password || !dentist.username || !dentist.hourlyRate || !dentist.gender)
+    return (!dentist.name || !dentist.phone || !mobileRegex.test(dentist.phone) || !dentist.email || !emailRegex.test(dentist.email) || !dentist.password || dentist.password.length < 6 || !dentist.username || dentist.username.length < 3 || !dentist.hourlyRate || !dentist.gender)
   }
 
   const handleAddDentist = async () => {
     // TODO: implement this function
-    axios.post(`${import.meta.env.VITE_BACKEND_BASE_URL}/admin/adddentist`, dentist)
+    try {
+      const { data } = await axios.post(`${import.meta.env.VITE_BACKEND_BASE_URL}/admin/adddentist`, dentist, {
+        headers: {
+          'Authorization': `${sessionStorage.getItem('authToken')}`
+        }
+      })
+      if (data.success) {
+        showToastMessage('SUCCESS', data.message)
+        setDentist({ name: "", phone: "", email: "", password: "", username: "", gender: "", hourlyRate: "" })
+      } else {
+        showToastMessage('ERROR', data.message)
+      }
+    } catch (error) {
+      console.log(error)
+      showToastMessage('ERROR', error.response.data.message)
+      if (error.response.status === 401) {
+        sessionStorage.removeItem('authToken')
+        navigate('/login')
+      }
+    }
   }
 
   return (
@@ -36,15 +65,15 @@ const Dentist = () => {
           <p >Gender</p>
           <div className="flex gap-1 w-full justify-between">
             <div className="flex  justify-center items-center gap-2">
-              <input type="radio" name="gender" value="male" onChange={handleChange} />
+              <input type="radio" name="gender" value="male" checked={dentist.gender === "male"} onChange={handleChange} />
               <label >Male</label>
             </div>
             <div className="flex  justify-center items-center gap-2">
-              <input type="radio" name="gender" value="female" onChange={handleChange} />
+              <input type="radio" name="gender" value="female" checked={dentist.gender === "female"} onChange={handleChange} />
               <label >Female</label>
             </div>
             <div className="flex  justify-center items-center gap-2">
-              <input type="radio" name="gender" value="other" onChange={handleChange} />
+              <input type="radio" name="gender" value="other" checked={dentist.gender === "other"} onChange={handleChange} />
               <label >Other</label>
             </div>
           </div>
