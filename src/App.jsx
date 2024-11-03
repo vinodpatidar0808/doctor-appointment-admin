@@ -6,6 +6,9 @@ import Login from "./pages/Login"
 import Reports from "./pages/Reports"
 import Services from "./pages/Services"
 import Dentist from "./pages/Dentist"
+import { ToastContainer } from "react-toastify"
+import 'react-toastify/dist/ReactToastify.css';
+
 
 function App() {
 
@@ -24,6 +27,7 @@ function App() {
           <Route path="dentist" element={<Dentist />} />
         </Route>
       </Routes>
+      <ToastContainer />
     </BrowserRouter>
 
   )

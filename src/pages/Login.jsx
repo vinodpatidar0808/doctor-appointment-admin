@@ -1,7 +1,10 @@
 import axios from "axios"
 import { useState } from "react"
+import { useNavigate } from "react-router-dom"
+import { showToastMessage } from "../utils"
 
 const Login = () => {
+  const navigate = useNavigate()
   const [user, setUser] = useState({ username: "", password: "" })
 
   const handleChange = (e) => {
@@ -9,12 +12,25 @@ const Login = () => {
   }
 
   const handleLogin = async () => {
-    axios.post(`${import.meta.env.VITE_BACKEND_BASE_URL}/admin/login`,
-      user
-    )
+    try {
+      const { data } = await axios.post(`${import.meta.env.VITE_BACKEND_BASE_URL}/admin/login`,
+        user
+      )
+      if (data.success) {
+        sessionStorage.setItem('authToken', data.token);
+        showToastMessage('SUCCESS', data.message)
+        navigate('/')
+        return
+      }else{
+        showToastMessage('ERROR', data.message)
+      }
+
+    } catch (error) {
+      console.log(error)
+      showToastMessage('ERROR', error.response.data.message)
+    }
   }
 
-  console.log("username, password: ", user.username, user.password)
 
   return (
     <main className="flex w-screen h-screen items-center text-charcoalGray  justify-center">
