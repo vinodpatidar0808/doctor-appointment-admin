@@ -7,7 +7,7 @@ const MainLayout = () => {
     <div>
       <Navbar />
       <Sidebar />
-      <main className="ml-[20%] py-4 ">
+      <main className="ml-[20%] py-4 h-screen">
         <Outlet />
       </main>
     </div>
