@@ -11,17 +11,14 @@ import 'react-toastify/dist/ReactToastify.css';
 
 
 function App() {
-
-
-
   return (
     <BrowserRouter>
       <Routes>
-        <Route path="/login" element={<Login />} />
+        <Route path="/" element={<Login />} />
 
         <Route path="/" element={<MainLayout />}>
           {/* Nested routes */}
-          <Route index element={<Dashboard />} /> Default component
+          <Route index path="dashboard" element={<Dashboard />} /> 
           <Route path="services" element={<Services />} />
           <Route path="reports" element={<Reports />} />
           <Route path="dentist" element={<Dentist />} />

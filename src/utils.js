@@ -2,7 +2,7 @@ import { toast } from 'react-toastify';
 
 
 export const getPageHeader = (pathname) => {
-  if (pathname === "/") {
+  if (pathname === "/dashboard") {
     return "Dashboard"
   }
 
