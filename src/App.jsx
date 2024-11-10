@@ -18,10 +18,10 @@ function App() {
         <Route path="/" element={<Login />} />
 
         <Route path="/" element={<PrivateRoute> <MainLayout /></PrivateRoute>}>
-          <Route index path="dashboard" element={<PrivateRoute> <Dashboard /></PrivateRoute>} />
-          <Route path="services" element={<PrivateRoute>  <Services /></PrivateRoute>} />
-          <Route path="reports" element={<PrivateRoute> <Reports /></PrivateRoute>} />
-          <Route path="dentist" element={<PrivateRoute> <Dentist /></PrivateRoute>} />
+          <Route index path="/dashboard" element={<Dashboard />} />
+          <Route path="/services" element={<Services />} />
+          <Route path="/reports" element={<Reports />} />
+          <Route path="/dentist" element={<Dentist />} />
         </Route>
       </Routes>
       <ToastContainer />
