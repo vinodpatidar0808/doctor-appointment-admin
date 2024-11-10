@@ -19,7 +19,6 @@ const Login = () => {
       if (data.success) {
         sessionStorage.setItem('authToken', data.token);
         showToastMessage('SUCCESS', data.message)
-        console.log("redirecting")
         navigate('/dashboard')
         return
       }else{
