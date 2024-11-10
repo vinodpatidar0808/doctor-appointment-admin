@@ -1,99 +1,58 @@
+import axios from "axios"
+import { useEffect, useState } from "react"
+import { useNavigate } from "react-router-dom"
 import TableRow from "../components/TableRow"
-
-const dummyData = [
-  {
-    date: '2023-01-01',
-    patientName: 'John Doe',
-    dentistName: 'Dr. Smith',
-    serviceRequested: 'Cavity Removal'
-  },
-  {
-    date: '2023-01-02',
-    patientName: 'Jane Smith',
-    dentistName: 'Dr. Johnson',
-    serviceRequested: 'Teeth Whitening'
-  },
-  {
-    date: '2023-01-03',
-    patientName: 'Bob Johnson',
-    dentistName: 'Dr. Davis',
-    serviceRequested: 'Root Canal'
-  },
-  {
-    date: '2023-01-04',
-    patientName: 'Alice Smith',
-    dentistName: 'Dr. Wilson',
-    serviceRequested: 'Teeth Whitening'
-  },
-  {
-    date: '2023-01-05',
-    patientName: 'John Doe',
-    dentistName: 'Dr. Smith',
-    serviceRequested: 'Cavity Removal'
-  },
-  {
-    date: '2023-01-06',
-    patientName: 'Jane Smith',
-    dentistName: 'Dr. Johnson',
-    serviceRequested: 'Teeth Whitening'
-  },
-  {
-    date: '2023-01-07',
-    patientName: 'Bob Johnson',
-    dentistName: 'Dr. Davis',
-    serviceRequested: 'Root Canal'
-  },
-  {
-    date: '2023-01-08',
-    patientName: 'Alice Smith',
-    dentistName: 'Dr. Wilson',
-    serviceRequested: 'Teeth Whitening'
-  },
-  {
-    date: '2023-01-09',
-    patientName: 'John Doe',
-    dentistName: 'Dr. Smith',
-    serviceRequested: 'Cavity Removal'
-  },
-  {
-    date: '2023-01-10',
-    patientName: 'Jane Smith',
-    dentistName: 'Dr. Johnson',
-    serviceRequested: 'Teeth Whitening'
-  },
-  {
-    date: '2023-01-11',
-    patientName: 'Bob Johnson',
-    dentistName: 'Dr. Davis',
-    serviceRequested: 'Root Canal'
-  },
-  {
-    date: '2023-01-12',
-    patientName: 'Alice Smith',
-    dentistName: 'Dr. Wilson',
-    serviceRequested: 'Teeth Whitening'
-  },
-]
+import { showToastMessage } from "../utils"
 
 
 const Dashboard = () => {
+  const navigate = useNavigate()
+  const [data, setData] = useState([])
+
+  const getTodaysAppointments = async () => {
+    try {
+      const { data } = await axios.get(`${import.meta.env.VITE_BACKEND_BASE_URL}/admin/todays-appointments`, {
+        headers: {
+          'Authorization': `${sessionStorage.getItem('authToken')}`
+        }
+      })
+      if (data.success) {
+        setData(data.appointments)
+        if (data.appointments.length === 0) showToastMessage('INFO', 'No appointments for today')
+      } else {
+        showToastMessage('ERROR', data.message)
+      }
+    } catch (error) {
+      console.log(error)
+      if (error.response.status === 401) {
+        sessionStorage.removeItem('authToken')
+        sessionStorage.removeItem('user')
+        navigate('/')
+      }
+      showToastMessage('ERROR', error.response.data.message)
+    }
+  }
+
+  useEffect(() => {
+    getTodaysAppointments()
+    //eslint-disable-next-line
+  }, [])
+
   return (
     <div className="">
       <div className="text-gray-900 text-sm w-full flex justify-end mb-2 px-8">View All </div>
       <div className="w-full flex flex-col ">
         <div className="w-full bg-warmLightGray flex justify-between  px-8 py-2 mb-2 ">
           <p className="flex-1  ">Appointment Date</p>
-          <p className="flex-1 flex bg-red-200">Patient Name</p>
-          <p className="flex-1 flex bg-green-300 ">Dentist Name</p>
-          <p className="flex-1 flex bg-green-500">Service Requested</p>
+          <p className="flex-1 flex">Patient Name</p>
+          <p className="flex-1 flex ">Dentist Name</p>
+          <p className="flex-1 flex ">Service Requested</p>
         </div>
         {
-          dummyData.map((data, index) => <TableRow key={index} row={data} />
+          data?.map((data, index) => <TableRow key={index} row={data} />
           )
         }
-
       </div>
-
     </div>
   )
 }

@@ -48,6 +48,18 @@ export const showToastMessage = (type, message) => {
     })
   }
   // Add other types when needed
+  if (type === 'INFO') {
+    toast.info(message, {
+      position: 'bottom-center',
+      autoClose: 700,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+      theme: 'light',
+    })
+  }
 };
 
 export const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
